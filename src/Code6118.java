@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Code {
+public class Code6118 {
     static int N, M, answer, maxDist=0, sameDistNum=0;
     static int[] visited, dist;
     static LinkedList<LinkedList<Integer>> adj = new LinkedList<>();

@@ -2,7 +2,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 
-public class Code {
+public class Code7576 {
     static Queue<Point> queue = new LinkedList<>();
     static int M, N;
     static int[][] box;
