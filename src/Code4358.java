@@ -1,19 +1,17 @@
 import java.io.*;
-import java.util.Scanner;
 import java.util.TreeMap;
 
-public class Code4358_fail {
+public class Code4358 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        Scanner sc = new Scanner(System.in);
         TreeMap<String, Integer> map = new TreeMap<>();
         double count=0;
         String s;
 
         while(true){
-            s = sc.nextLine();
-            if(s.isEmpty()) break;
+            s = br.readLine();
+            if(s == null) break;
             count++;
             if(map.containsKey(s)){
                 map.put(s, map.get(s)+1);
