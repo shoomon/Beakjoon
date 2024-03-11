@@ -1,60 +1,71 @@
-import java.awt.*;
+import java.io.*;
 import java.util.*;
-
+import java.awt.*;
 public class Code15686_notDone {
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        int N, M, chickNum = 0, answer = 0;
-        int[][] map;
-        Point[] chickLoc;
-        int[] chickDist;
+    static int N, M, answer=Integer.MAX_VALUE;
+    static int[][] map;
+    static ArrayList<Point> home = new ArrayList<>(), chicken = new ArrayList<>();
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int[] dist;
+        Stack<Point> s = new Stack<>();
 
-        N = sc.nextInt();
-        M = sc.nextInt();
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
         map = new int[N][N];
-        chickLoc = new Point[13];
-        chickDist = new int[13];
 
         for(int i = 0; i < N; i++){
+            st = new StringTokenizer(br.readLine());
             for(int j = 0; j < N; j++){
-                map[i][j] = sc.nextInt();
-                if(map[i][j] == 2){
-                    chickLoc[chickNum++] = new Point(j, i);
-                }
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if(map[i][j] == 1) home.add(new Point(j,i));
+                if(map[i][j] == 2) chicken.add(new Point(j,i));
             }
         }
 
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < N; j++){
-                if(map[i][j] == 1){
-                    minDist(i, j, chickNum, chickLoc, chickDist);
-                }
-            }
-        }
+        dist = new int[home.size()];
 
-        Arrays.sort(chickDist);
-        int count = 0;
+        Arrays.fill(dist, Integer.MAX_VALUE);
 
-        while(count < M){
-            if(chickDist[count] != 0){
-                answer += chickDist[count++];
-            }
-        }
+        chickDist(s, dist, 0);
 
-        System.out.println(answer + "");
+        bw.write(answer+"");
+
+        br.close();
+        bw.close();
 
     }
 
-    static void minDist(int i, int j, int chickCount, Point[] chickLoc, int[] sumChick){
-        int min = Integer.MAX_VALUE, dist, p = -1;
+    static void chickDist(Stack<Point> s, int[] dist, int count){
+        Point p;
 
-        for(int k = 0; k < chickCount; k++){
-            dist = Math.abs(chickLoc[k].y - i) + Math.abs(chickLoc[k].x - j);
-            if(dist < min){
-                min = dist;
-                p = k;
+        if(count == M){
+            int sum=0;
+            for(int i = 0; i < dist.length; i++){
+                sum += dist[i];
+            }
+            answer = Math.min(sum, answer);
+            return;
+        }
+
+        if(!s.isEmpty()){
+            p = s.peek();
+            for(int i = 0; i < dist.length; i++){
+                dist[i] = Math.min(dist[i], calcDist(home.get(i), p));
             }
         }
-        sumChick[p] += min;
+
+        for(int i = count; i < chicken.size(); i++){
+            s.push(chicken.get(i));
+            chickDist(s, dist, count+1);
+            s.pop();
+        }
+    }
+
+    static int calcDist(Point a, Point b){
+        return Math.abs(a.x-b.x) + Math.abs(a.y-b.y);
     }
 }
